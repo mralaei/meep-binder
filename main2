@@ -1,0 +1,29 @@
+import meep as mp
+
+# تنظیم سلول محاسباتی
+cell = mp.Vector3(20, 10, 0)
+
+# تعریف تگ مستطیلی
+tag1 = mp.Block(mp.Vector3(1, 0.2, mp.inf),
+                center=mp.Vector3(-5, 0),
+                material=mp.Medium(epsilon=12))
+
+# تعریف تگ حلقه‌ای (با شکاف مرکزی)
+tag2 = mp.Block(mp.Vector3(1, 0.2, mp.inf),
+                center=mp.Vector3(5, 0),
+                material=mp.Medium(epsilon=12))
+
+geometry = [tag1, tag2]
+
+# منبع پالس گاوسی
+sources = [mp.Source(mp.GaussianSource(frequency=2.0, fwidth=1.0),
+                     component=mp.Ez,
+                     center=mp.Vector3(0, -4))]
+
+# تعریف شبیه‌سازی
+sim = mp.Simulation(cell_size=cell,
+                    geometry=geometry,
+                    sources=sources,
+                    resolution=20)
+
+sim.run(until=200)
